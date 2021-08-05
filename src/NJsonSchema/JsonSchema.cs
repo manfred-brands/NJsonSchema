@@ -826,10 +826,27 @@ namespace NJsonSchema
         /// <returns>The JSON string.</returns>
         public string ToJson(Formatting formatting)
         {
+            return ToJson(formatting, false);
+        }
+
+        /// <summary>Serializes the <see cref="JsonSchema" /> to a JSON string.</summary>
+        /// <param name="removeExternalReferences">Specifies whether to remove external references (otherwise they are inlined).</param>
+        /// <returns>The JSON string.</returns>
+        public string ToJson(bool removeExternalReferences)
+        {
+            return ToJson(Formatting.Indented, removeExternalReferences);
+        }
+
+        /// <summary>Serializes the <see cref="JsonSchema" /> to a JSON string.</summary>
+        /// <param name="formatting">The formatting.</param>
+        /// <param name="removeExternalReferences">Specifies whether to remove external references (otherwise they are inlined).</param>
+        /// <returns>The JSON string.</returns>
+        public string ToJson(Formatting formatting, bool removeExternalReferences)
+        {
             var oldSchema = SchemaVersion;
             SchemaVersion = "http://json-schema.org/draft-04/schema#";
 
-            var json = JsonSchemaSerialization.ToJson(this, SerializationSchemaType, ContractResolver.Value, formatting);
+            var json = JsonSchemaSerialization.ToJson(this, SerializationSchemaType, ContractResolver.Value, formatting, removeExternalReferences);
 
             SchemaVersion = oldSchema;
             return json;

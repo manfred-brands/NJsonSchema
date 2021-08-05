@@ -71,6 +71,21 @@ namespace NJsonSchema.Tests.References
         }
 
         [Fact]
+        public async Task When_schema_references_external_schema_then_they_ara_preserved_with_ToJson()
+        {
+            //// Arrange
+            var path = GetTestDirectory() + "/References/LocalReferencesTests/schema_with_reference.json";
+
+            //// Act
+            var schema = await JsonSchema.FromFileAsync(path);
+            var json = schema.ToJson(true);
+
+            //// Assert
+            Assert.True(schema.Definitions.ContainsKey("Animal"));
+            Assert.Contains("\"$ref\": \"./animal.json\"", json);
+        }
+
+        [Fact]
         public async Task When_document_has_indirect_external_ref_than_it_is_loaded()
         {
             //// Arrange

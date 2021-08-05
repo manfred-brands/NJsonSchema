@@ -57,10 +57,22 @@ namespace NJsonSchema.Infrastructure
         /// <returns>The JSON.</returns>
         public static string ToJson(object obj, SchemaType schemaType, IContractResolver contractResolver, Formatting formatting)
         {
+            return ToJson(obj, schemaType, contractResolver, formatting, false);
+        }
+
+        /// <summary>Serializes an object to a JSON string with reference handling.</summary>
+        /// <param name="obj">The object to serialize.</param>
+        /// <param name="schemaType">The schema type.</param>
+        /// <param name="contractResolver">The contract resolver.</param>
+        /// <param name="formatting">The formatting.</param>
+        /// <param name="removeExternalReferences">Specifies whether to remove external references (otherwise they are inlined).</param>
+        /// <returns>The JSON.</returns>
+        public static string ToJson(object obj, SchemaType schemaType, IContractResolver contractResolver, Formatting formatting, bool removeExternalReferences)
+        {
             IsWriting = false;
             CurrentSchemaType = schemaType;
 
-            JsonSchemaReferenceUtilities.UpdateSchemaReferencePaths(obj, false, contractResolver);
+            JsonSchemaReferenceUtilities.UpdateSchemaReferencePaths(obj, removeExternalReferences, contractResolver);
 
             IsWriting = false;
             CurrentSerializerSettings = new JsonSerializerSettings

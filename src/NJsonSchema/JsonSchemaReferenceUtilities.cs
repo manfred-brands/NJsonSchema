@@ -152,11 +152,11 @@ namespace NJsonSchema
                             externalReferenceRoot, externalReference, _contractResolver).TrimEnd('#');
                     }
                 }
-                else if (_removeExternalReferences && _rootObject != reference && reference.DocumentPath != null)
-                {
-                    throw new NotSupportedException("removeExternalReferences not supported");
-                    //return new JsonSchema4 { ReferencePath = reference.DocumentPath };
-                }
+                //else if (_removeExternalReferences && _rootObject != reference && reference.DocumentPath != null)
+                //{
+                //    throw new NotSupportedException("removeExternalReferences not supported");
+                //    //return new JsonSchema4 { ReferencePath = reference.DocumentPath };
+                //}
 
                 return reference;
             }

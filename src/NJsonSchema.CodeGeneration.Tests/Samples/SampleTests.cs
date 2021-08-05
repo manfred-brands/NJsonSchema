@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using NJsonSchema.CodeGeneration.TypeScript;
+using NJsonSchema.Generation;
 using Xunit;
 
 namespace NJsonSchema.CodeGeneration.Tests.Samples
@@ -135,6 +136,40 @@ namespace NJsonSchema.CodeGeneration.Tests.Samples
 
             //// Assert
             Assert.Equal(0, errors.Count);
+        }
+
+        [Fact]
+        public void SchemaWithExternalReferences()
+        {
+            var schemaGeneratorSettings = new JsonSchemaGeneratorSettings();
+            var rootSchema = new JsonSchema();
+            var schemaResolver = new JsonSchemaResolver(rootSchema, schemaGeneratorSettings);
+            var schemaGenerator = new JsonSchemaGenerator(schemaGeneratorSettings);
+
+            JsonSchema genderSchema = schemaGenerator.Generate(typeof(Gender), schemaResolver);
+            genderSchema.DocumentPath = "Gender.json";
+            JsonSchema companySchema = schemaGenerator.Generate(typeof(Company), schemaResolver);
+            companySchema.DocumentPath = "Company.json";
+            JsonSchema carSchema = schemaGenerator.Generate(typeof(Car), schemaResolver);
+            carSchema.DocumentPath = "Car.json";
+            JsonSchema personSchema = schemaGenerator.Generate(typeof(Person), schemaResolver);
+            personSchema.DocumentPath = "Person.json";
+
+            try
+            {
+                string genderJson = genderSchema.ToJson(true);
+                string companyJson = companySchema.ToJson(true);
+                string carJson = carSchema.ToJson(true);
+                string personJson = personSchema.ToJson(true);
+
+                Assert.Contains("Gender.json", personJson);
+                Assert.Contains("Company.json", personJson);
+                Assert.Contains("Car.json", personJson);
+            }
+            catch (Exception exception)
+            {
+                throw new NotImplementedException("Unknown", exception);
+            }
         }
     }
 }
