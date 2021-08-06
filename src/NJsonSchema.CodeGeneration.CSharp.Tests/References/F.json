@@ -1,0 +1,44 @@
+{
+  "definitions": {
+    "B": {
+      "type": "object",
+      "description": "This is the class B",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "This is the ID of B"
+        },
+        "type": {
+          "$ref": "./C.json",
+          "description": "This is the type of B"
+        },
+        "empty": {
+          "$ref": "#/definitions/D",
+          "description": "This one should be of type D and not object"
+        }
+      }
+    },
+    "D": {
+      "type": "object",
+      "description": "Possible types"
+    }
+  },
+  "type": "object",
+  "required": [
+    "signalPaths"
+  ],
+  "description": "This is the class E",
+  "properties": {
+    "type": {
+      "$ref": "./C.json",
+      "description": "This is the type of E"
+    },
+    "signalPaths": {
+      "children": "array",
+      "items": {
+        "$ref": "#/definitions/B",
+        "description": "This is a list of children"
+      }
+    }
+  }
+}

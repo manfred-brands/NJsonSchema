@@ -179,6 +179,31 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
             Assert.Contains("base(id)", code);
         }
 
+        [Fact]
+        public async Task When_definition_inherits_exernal_base_class_is_not_included()
+        {
+            //// Arrange
+            var path = GetTestDirectory() + "/References/Car.json";
+
+            //// Act
+            var schema = await JsonSchema.FromFileAsync(path);
+            var generator = new CSharpGenerator(schema, new CSharpGeneratorSettings
+            {
+                ClassStyle = CSharpClassStyle.Record,
+                SortConstructorParameters = false,
+                ExcludeExternalReferences = true,
+            });
+
+            //// Act
+            var code = generator.GenerateFile();
+
+            //// Assert
+            Assert.DoesNotContain("public partial class Vehicle", code);
+            Assert.Contains("public partial class Car : Vehicle", code);
+            Assert.Contains("Car(string @id, int @wheels)", code);
+            Assert.Contains("base(id)", code);
+        }
+
         private string GetTestDirectory()
         {
             var codeBase = Assembly.GetExecutingAssembly().CodeBase;

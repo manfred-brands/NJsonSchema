@@ -48,9 +48,9 @@ namespace NJsonSchema.CodeGeneration.CSharp
         public CSharpGeneratorSettings Settings { get; }
 
         /// <inheritdoc />
-        public override IEnumerable<CodeArtifact> GenerateTypes()
+        public override IEnumerable<CodeArtifact> GenerateTypes(bool excludeExternalReferences)
         {
-            var baseArtifacts = base.GenerateTypes();
+            var baseArtifacts = base.GenerateTypes(excludeExternalReferences);
             var artifacts = new List<CodeArtifact>();
 
             if (baseArtifacts.Any(r => r.Code.Contains("JsonInheritanceConverter")))

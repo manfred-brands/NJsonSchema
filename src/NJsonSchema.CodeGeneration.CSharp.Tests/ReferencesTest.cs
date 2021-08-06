@@ -3,6 +3,7 @@ using NJsonSchema.CodeGeneration.CSharp;
 using NJsonSchema.Infrastructure;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Xunit;
@@ -45,6 +46,30 @@ namespace NJsonSchema.CodeGeneration.Tests.CSharp
             //// Assert
             Assert.Contains("public enum C", code);
             Assert.DoesNotContain("public enum C2", code);
+        }
+
+        [Fact]
+        public async Task When_ref_is_file_no_types_are_created()
+        {
+            //// Arrange
+            var path = GetTestDirectory() + "/References/F.json";
+
+            //// Act
+            var schema = await JsonSchema.FromFileAsync(path);
+            var settings = new CSharpGeneratorSettings
+            {
+                ExcludeExternalReferences = true,
+            };
+            var generator = new CSharpGenerator(schema, settings);
+
+            //// Act
+            var code = generator.GenerateFile("MyClass");
+
+            //// Assert
+            Assert.Contains("class MyClass", code);
+            Assert.Contains("class B", code);
+            Assert.DoesNotContain("enum C", code);
+            Assert.Contains("class D", code);
         }
 
         private string GetTestDirectory()

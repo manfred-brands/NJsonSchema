@@ -51,19 +51,19 @@ namespace NJsonSchema.CodeGeneration.TypeScript
 
         /// <summary>Generates all types from the resolver with extension code from the settings.</summary>
         /// <returns>The code.</returns>
-        public override IEnumerable<CodeArtifact> GenerateTypes()
+        public override IEnumerable<CodeArtifact> GenerateTypes(bool excludeExternalReferences)
         {
             _extensionCode = _extensionCode ??
                 new TypeScriptExtensionCode(Settings.ExtensionCode, Settings.ExtendedClasses);
 
-            return GenerateTypes(_extensionCode);
+            return GenerateTypes(_extensionCode, excludeExternalReferences);
         }
 
         /// <summary>Generates all types from the resolver with the given extension code.</summary>
         /// <returns>The code.</returns>
-        public IEnumerable<CodeArtifact> GenerateTypes(TypeScriptExtensionCode extensionCode)
+        public IEnumerable<CodeArtifact> GenerateTypes(TypeScriptExtensionCode extensionCode, bool excludeExternalReferences)
         {
-            var artifacts = base.GenerateTypes();
+            var artifacts = base.GenerateTypes(excludeExternalReferences);
             foreach (var artifact in artifacts)
             {
                 if (extensionCode?.ExtensionClasses.ContainsKey(artifact.TypeName) == true)

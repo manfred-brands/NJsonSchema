@@ -32,7 +32,7 @@ namespace NJsonSchema.CodeGeneration
         /// <summary>Gets the root object.</summary>
         protected object RootObject { get; }
 
-        /// <summary>Generates the the whole file containing all needed types.</summary>
+        /// <summary>Generates the whole file containing all needed types.</summary>
         /// <returns>The code</returns>
         public string GenerateFile(string typeNameHint)
         {
@@ -40,7 +40,7 @@ namespace NJsonSchema.CodeGeneration
             return GenerateFile(schema, typeNameHint);
         }
 
-        /// <summary>Generates the the whole file containing all needed types.</summary>
+        /// <summary>Generates the whole file containing all needed types.</summary>
         /// <returns>The code</returns>
         public string GenerateFile()
         {
@@ -55,10 +55,10 @@ namespace NJsonSchema.CodeGeneration
         public IEnumerable<CodeArtifact> GenerateTypes(JsonSchema schema, string typeNameHint)
         {
             _resolver.Resolve(schema, false, typeNameHint); // register root type
-            return GenerateTypes();
+            return GenerateTypes(_settings.ExcludeExternalReferences);
         }
 
-        /// <summary>Generates the the whole file containing all needed types.</summary>
+        /// <summary>Generates the whole file containing all needed types.</summary>
         /// <returns>The code</returns>
         public string GenerateFile(JsonSchema schema, string typeNameHint)
         {
@@ -67,8 +67,9 @@ namespace NJsonSchema.CodeGeneration
         }
 
         /// <summary>Generates all types from the resolver.</summary>
+        /// <param name="excludeExternalReferences">Do not include types which are elsewhere.</param>
         /// <returns>The code.</returns>
-        public virtual IEnumerable<CodeArtifact> GenerateTypes()
+        public virtual IEnumerable<CodeArtifact> GenerateTypes(bool excludeExternalReferences)
         {
             var processedTypes = new List<string>();
             var types = new Dictionary<string, CodeArtifact>();
@@ -77,8 +78,11 @@ namespace NJsonSchema.CodeGeneration
                 foreach (var pair in _resolver.Types.ToList())
                 {
                     processedTypes.Add(pair.Value);
-                    var result = GenerateType(pair.Key, pair.Value);
-                    types[result.TypeName] = result;
+                    if (pair.Key == RootObject || !(excludeExternalReferences && pair.Key.DocumentPath != null))
+                    {
+                        var result = GenerateType(pair.Key, pair.Value);
+                        types[result.TypeName] = result;
+                    }
                 }
             }
 
@@ -88,7 +92,7 @@ namespace NJsonSchema.CodeGeneration
             return artifacts;
         }
 
-        /// <summary>Generates the the whole file containing all needed types.</summary>
+        /// <summary>Generates the whole file containing all needed types.</summary>
         /// <returns>The code</returns>
         protected abstract string GenerateFile(IEnumerable<CodeArtifact> artifacts);
 

@@ -54,5 +54,8 @@ namespace NJsonSchema.CodeGeneration
 
         /// <summary>Gets or sets a value indicating whether named/referenced any schemas should be inlined or generated as class.</summary>
         public bool InlineNamedAny { get; set; }
+
+        /// <summary>Gets or sets whether to create classes for external referenced schemas.</summary>
+        public bool ExcludeExternalReferences { get; set; }
     }
 }

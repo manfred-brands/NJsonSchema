@@ -13,6 +13,7 @@
     <None Remove="References\Car.json" />
     <None Remove="References\D.json" />
     <None Remove="References\E.json" />
+    <None Remove="References\F.json" />
     <None Remove="References\Vehicle.json" />
   </ItemGroup>
   <ItemGroup>
@@ -35,6 +36,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="References\D.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="References\F.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="References\E.json">
