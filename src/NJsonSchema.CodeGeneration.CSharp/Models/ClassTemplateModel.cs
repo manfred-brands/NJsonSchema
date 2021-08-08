@@ -42,7 +42,7 @@ namespace NJsonSchema.CodeGeneration.CSharp.Models
             if (schema.InheritedSchema != null)
             {
                 BaseClass = new ClassTemplateModel(BaseClassName, settings, resolver, schema.InheritedSchema, rootObject);
-                AllProperties = Properties.Concat(BaseClass.AllProperties).ToArray();
+                AllProperties = BaseClass.AllProperties.Concat(Properties).ToArray();
             }
             else
             {
